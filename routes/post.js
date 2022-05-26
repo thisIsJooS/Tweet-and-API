@@ -60,4 +60,24 @@ router.post("/", isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 });
 
+router.post("/:id/like", isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.params.id } });
+    await post.addLiker(req.user.id);
+    res.send("OK");
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.delete("/:id/like", isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.params.id } });
+    await post.removeLiker(req.user.id);
+    res.send("OK");
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

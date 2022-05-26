@@ -33,16 +33,25 @@ router.get("/hashtag", async (req, res, next) => {
     if (hashtag) {
       posts = await hashtag.getPosts({ include: [{ model: User }] });
     }
-  } catch (error) {}
+  } catch (error) {
+    next(err);
+  }
 });
 
 router.get("/", async (req, res, next) => {
   try {
     const posts = await Post.findAll({
-      include: {
-        model: User,
-        attributes: ["id", "nick"],
-      },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "nick"],
+        },
+        {
+          model: User,
+          attributes: ["id", "nick"],
+          as: "Liker",
+        },
+      ],
       order: [["createdAt", "DESC"]],
     });
 

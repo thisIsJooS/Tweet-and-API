@@ -49,10 +49,17 @@
           {% if twit.img %}
             <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"/></div>
           {% endif %}
-          {% if user %}
-            <button>좋아요</button>
-          {% elif user %}
-            <button>좋아요 취소</button>
+
+          {% set twitLikerIdList = [] %}
+          {% for liker in twit.Liker %}
+            {% set twitLikerIdList = (twitLikerIdList.push(liker.id), twitLikerIdList) %}
+          {% endfor %}
+          {% set like = (twit and twitLikerIdList.includes(user.id)) %}
+
+          {% if user and not like %}
+            <button class="like">좋아요</button>
+          {% elif user and like%}
+            <button class="unlike">좋아요 취소</button>
           {% endif %}
         </div>
       {% endfor %}
@@ -136,6 +143,34 @@
             }
           }
         });
+      });
+    document
+      .querySelectorAll('.like')
+      .forEach(tag => {
+        tag.addEventListener('click', () => {
+          const twitId = tag
+            .parentNode
+            .querySelector('.twit-id')
+            .value;
+          axios
+            .post(`/post/${twitId}/like`)
+            .then(() => location.reload())
+            .catch(console.error)
+          });
+      });
+    document
+      .querySelectorAll('.unlike')
+      .forEach(tag => {
+        tag.addEventListener('click', () => {
+          const twitId = tag
+            .parentNode
+            .querySelector('.twit-id')
+            .value;
+          axios
+            .delete(`/post/${twitId}/like`)
+            .then(() => location.reload())
+            .catch(console.error)
+          });
       });
   </script>
 {% endblock %}
