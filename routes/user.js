@@ -34,23 +34,31 @@ router.post("/:id/unfollow", isLoggedIn, async (req, res, next) => {
 
 router.post("/update", isLoggedIn, async (req, res, next) => {
   try {
-    const user = await User.findOne({ where: { email: req.body.email } });
-    if (!user) {
-      return res.status(404).send("no user");
+    let user;
+    if (req.body.email) {
+      user = await User.findOne({ where: { email: req.body.email } });
+      if (!user) {
+        return res.status(404).send("no user");
+      }
+      const check = await bcrypt.compare(req.body.password, user.password);
+      if (!check) {
+        return res.status(404).send("invalid password");
+      }
+    } else if (req.body.snsId) {
+      user = await User.findOne({ where: { snsId: req.body.snsId } });
+      if (!user) {
+        return res.status(404).send("no user");
+      }
     }
-
-    const check = await bcrypt.compare(req.body.password, user.password);
-    if (!check) {
-      return res.status(404).send("invalid password");
-    }
-
     await user.set({
       nick: req.body.nick,
     });
     await user.save();
 
     return res.redirect("/");
-  } catch (err) {}
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;

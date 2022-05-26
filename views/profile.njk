@@ -2,12 +2,15 @@
 {% block content %}
 
   <form action="/user/update" method="POST">
-    <label for="email">이메일</label>
-    <input type="text" value="{{user.email}}" readonly="readonly" name="email"><br>
     <label for="nick">nickname</label>
     <input name="nick" type="text" value="{{user.nick}}"><br>
-    <label for="password">password</label>
-    <input name="password" type="password"><br>
+    {% if user.provider == 'local' %}
+      <input type="hidden" value="{{user.email}}" name="email">
+      <label for="password">password</label>
+      <input name="password" type="password"><br>
+    {% elif user.provider == 'kakao' %}
+      <input type="hidden" value="{{user.snsId}}" name="snsId">
+    {% endif %}
     <button type="submit">회원정보 수정</button>
   </form>
   <div class="timeline">
