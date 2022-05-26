@@ -34,28 +34,19 @@ router.post("/:id/unfollow", isLoggedIn, async (req, res, next) => {
 
 router.post("/update", isLoggedIn, async (req, res, next) => {
   try {
-    let user;
-    if (req.body.email) {
-      user = await User.findOne({ where: { email: req.body.email } });
-      if (!user) {
-        return res.status(404).send("no user");
-      }
-      const check = await bcrypt.compare(req.body.password, user.password);
-      if (!check) {
-        return res.status(404).send("invalid password");
-      }
-    } else if (req.body.snsId) {
-      user = await User.findOne({ where: { snsId: req.body.snsId } });
-      if (!user) {
-        return res.status(404).send("no user");
-      }
+    if (req.user.provider == "local") {
+      await User.update(
+        { nick: req.body.nick },
+        { where: { id: req.user.id } }
+      );
+    } else if (req.user.provider == "kakao") {
+      await User.update(
+        { nick: req.body.nick },
+        { where: { snsId: req.user.snsId } }
+      );
     }
-    await user.set({
-      nick: req.body.nick,
-    });
-    await user.save();
 
-    return res.redirect("/");
+    return res.redirect("/profile");
   } catch (err) {
     next(err);
   }

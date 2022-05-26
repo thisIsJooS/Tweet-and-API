@@ -4,13 +4,6 @@
   <form action="/user/update" method="POST">
     <label for="nick">nickname</label>
     <input name="nick" type="text" value="{{user.nick}}"><br>
-    {% if user.provider == 'local' %}
-      <input type="hidden" value="{{user.email}}" name="email">
-      <label for="password">password</label>
-      <input name="password" type="password"><br>
-    {% elif user.provider == 'kakao' %}
-      <input type="hidden" value="{{user.snsId}}" name="snsId">
-    {% endif %}
     <button type="submit">회원정보 수정</button>
   </form>
   <div class="timeline">
