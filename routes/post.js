@@ -60,6 +60,20 @@ router.post("/", isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 });
 
+router.delete("/:id", isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.params.id } });
+    if (req.user.id == post.UserId) {
+      await Post.destroy({ where: { id: req.params.id } });
+      res.send("OK");
+    } else {
+      res.send(401);
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post("/:id/like", isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findOne({ where: { id: req.params.id } });

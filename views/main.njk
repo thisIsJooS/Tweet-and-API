@@ -61,6 +61,10 @@
           {% elif user and like%}
             <button class="unlike">좋아요 취소</button>
           {% endif %}
+          {% if twit.User.id == user.id %}
+            <hr>
+            <button class="twit-delete">게시글 삭제</button>
+          {% endif %}
         </div>
       {% endfor %}
     </div>
@@ -168,6 +172,20 @@
             .value;
           axios
             .delete(`/post/${twitId}/like`)
+            .then(() => location.reload())
+            .catch(console.error)
+          });
+      });
+    document
+      .querySelectorAll('.twit-delete')
+      .forEach(tag => {
+        tag.addEventListener('click', () => {
+          const twitId = tag
+            .parentNode
+            .querySelector('.twit-id')
+            .value;
+          axios
+            .delete(`/post/${twitId}`)
             .then(() => location.reload())
             .catch(console.error)
           });
