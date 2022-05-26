@@ -19,7 +19,7 @@ router.post("/:id/follow", isLoggedIn, async (req, res, next) => {
   } catch (err) {}
 });
 
-router.post("/:id/unfollow", isLoggedIn, async (req, res, next) => {
+router.delete("/:id/follow", isLoggedIn, async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { id: req.user.id } });
 

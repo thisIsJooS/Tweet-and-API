@@ -49,6 +49,11 @@
           {% if twit.img %}
             <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"/></div>
           {% endif %}
+          {% if user %}
+            <button>좋아요</button>
+          {% elif user %}
+            <button>좋아요 취소</button>
+          {% endif %}
         </div>
       {% endfor %}
     </div>
@@ -120,7 +125,7 @@
             if (userId !== myId.value) {
               if (confirm("팔로우를 끊으시겠습니까?")) {
                 axios
-                  .post(`/user/${userId}/unfollow`)
+                  .delete(`/user/${userId}/follow`)
                   .then(() => {
                     location.reload();
                   })
