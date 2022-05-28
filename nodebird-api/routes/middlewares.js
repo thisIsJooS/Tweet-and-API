@@ -38,11 +38,11 @@ exports.verifyToken = (req, res, next) => {
 
 exports.apiLimiter = RateLimit({
   windowMs: 60 * 1000,
-  max: 1,
+  max: 5,
   handler(req, res) {
     res.status(this.statusCode).json({
       code: this.statusCode, // 기본값 429
-      message: "1분에 한 번만 요청할 수 있습니다.",
+      message: "1분에 5번만 요청할 수 있습니다.",
     });
   },
 });
