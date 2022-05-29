@@ -6,7 +6,7 @@ const {
   addFollowing,
   deleteFollowing,
   updateFollowing,
-} = require("../contollers/user");
+} = require("../controllers/user");
 
 const router = express.Router();
 
