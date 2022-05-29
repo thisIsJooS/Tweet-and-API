@@ -33,6 +33,11 @@ router.get("/hashtag", async (req, res, next) => {
     if (hashtag) {
       posts = await hashtag.getPosts({ include: [{ model: User }] });
     }
+
+    return res.render("main", {
+      title: `${query} | NodeBird`,
+      twits: posts,
+    });
   } catch (error) {
     next(err);
   }
