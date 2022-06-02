@@ -114,4 +114,24 @@ router.get(
   }
 );
 
+router.get("/follow", verifyToken, apiLimiter, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.decoded.id } });
+    const follower = await user.getFollowers();
+    const following = await user.getFollowings();
+
+    return res.json({
+      code: 200,
+      follower,
+      following,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      code: 500,
+      message: "서버에러",
+    });
+  }
+});
+
 module.exports = router;
