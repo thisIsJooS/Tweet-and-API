@@ -10,7 +10,7 @@ const request = async (req, api) => {
     if (!req.session.jwt) {
       // 세션에 토큰이 없으면
       const tokenResult = await axios.post(`${URL}/token`, {
-        clientSecret: process.env.CLIENT_SECRET,
+        clientSecret: process.env.SERVER_SECRET,
       });
       req.session.jwt = tokenResult.data.token; // 세션에 토큰 저장
     }
@@ -28,7 +28,7 @@ const request = async (req, api) => {
 };
 
 router.get("/", (req, res) => {
-  res.render("main", { key: process.env.CLIENT_SECRET });
+  res.render("main", { key: process.env.SERVER_SECRET });
 });
 
 router.get("/mypost", async (req, res, next) => {

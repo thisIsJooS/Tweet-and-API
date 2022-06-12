@@ -16,6 +16,10 @@ module.exports = class Domain extends Sequelize.Model {
           type: Sequelize.UUID,
           allowNull: false,
         },
+        serverSecret: {
+          type: Sequelize.UUID,
+          allowNull: false,
+        },
       },
       {
         sequelize,
